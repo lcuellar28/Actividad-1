@@ -1,0 +1,203 @@
+---
+title: "Carrera Luz 2022 - Actividad 1 - Métodos y Simulación Estadística - Leonardo Cuéllar R"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(paqueteMET)   # activar paqueteMET
+library(readr)
+library(ggplot2)
+library(flextable)
+
+data("CarreraLuz22")
+
+# subsets-----------------------------------------------------------------------
+CarreraLuz22$sex[CarreraLuz22$sex == "M"]="Hombre"
+CarreraLuz22$sex[CarreraLuz22$sex == "F"]="Mujer"
+#-------------------------------------------------------------------------------
+CarreraLuz22M = subset(CarreraLuz22, CarreraLuz22$sex=="Hombre")
+CarreraLuz22F = subset(CarreraLuz22, CarreraLuz22$sex=="Mujer")
+
+#-------------------------------------------------------------------------------
+CarreraLuz22_c1M = subset(CarreraLuz22M, CarreraLuz22M$categoria=="1. Juvenil")
+CarreraLuz22_c2M = subset(CarreraLuz22M, CarreraLuz22M$categoria=="2. Abierta")
+CarreraLuz22_c3M = subset(CarreraLuz22M, CarreraLuz22M$categoria=="3. Veteranos A")
+CarreraLuz22_c4M = subset(CarreraLuz22M, CarreraLuz22M$categoria=="4. Veteranos B")
+CarreraLuz22_c5M = subset(CarreraLuz22M, CarreraLuz22M$categoria=="5. Veteranos C")
+
+
+CarreraLuz22_c1F = subset(CarreraLuz22F, CarreraLuz22F$categoria=="1. Juvenil")
+CarreraLuz22_c2F = subset(CarreraLuz22F, CarreraLuz22F$categoria=="2. Abierta")
+CarreraLuz22_c3F = subset(CarreraLuz22F, CarreraLuz22F$categoria=="3. Veteranos A")
+CarreraLuz22_c4F = subset(CarreraLuz22F, CarreraLuz22F$categoria=="4. Veteranos B")
+CarreraLuz22_c5F = subset(CarreraLuz22F, CarreraLuz22F$categoria=="5. Veteranos C")
+#-------------------------------------------------------------------------------
+
+categoria= c("Juvenil","Abierta","Veteranos A", "Veteranos B","Veteranos C")
+t2 = aggregate(CarreraLuz22$timerun/60, by=list(CarreraLuz22$categoria,CarreraLuz22$sex), FUN= summary)
+t2=t2$x
+t2m=t2[1:5,] 
+row.names(t2m)=categoria
+t2h=t2[6:10,] 
+row.names(t2h)=categoria
+
+```
+
+Column {data-width=1450 .tabset .tabset}
+-----------------------------------------------------------------------
+
+### Desempeño por edad
+
+```{r}
+library(ggplot2)
+ggplot(CarreraLuz22, aes(y=timerun/60, x=edad))+
+geom_jitter(color="#0EB0C6", size=1)     # grafico de puntos
+```
+
+### Hombres por categoría
+
+```{r}
+ggplot(CarreraLuz22M) +
+  geom_jitter(aes(x = categoria, y = timerun/60), color="#034A94", size=1)
+
+#ggplot(CarreraLuz22M, aes(categoria, colour = 'edad')) +
+    #geom_density()
+```
+
+### Mujeres por categoría
+
+```{r}
+library(ggplot2)
+ggplot(CarreraLuz22F) +
+  geom_jitter(aes(x = categoria, y = timerun/60), color="#ee964b", size=1)
+```
+
+### Categoria Abierta Mujeres
+
+```{r}
+ggplot(CarreraLuz22_c2F, aes(timerun/60)) +
+    geom_density(color = "red", fill = "red", alpha = 0.5)
+```
+
+
+### Categoria Abierta Hombres
+
+```{r}
+ggplot(CarreraLuz22_c2M, aes(timerun/60)) +
+    geom_density(color = "blue", fill = "blue", alpha = 0.5)
+```
+
+### Categoria Veteranos A Mujeres
+
+```{r}
+ggplot(CarreraLuz22_c3F, aes(timerun/60)) +
+    geom_density(color = "yellow", fill = "yellow", alpha = 0.5)
+```
+
+### Categoria Veteranos A Hombres
+
+```{r}
+ggplot(CarreraLuz22_c3M, aes(timerun/60)) +
+    geom_density(color = "green", fill = "green", alpha = 0.5)
+```
+
+
+### Información adicional
+
+```{r}
+table(CarreraLuz22$origen)
+table(CarreraLuz22$nacionalidad)
+
+#dataFc4=subset(CarreraLuz22, (CarreraLuz22$sex=="Mujer" & CarreraLuz22$categoria=="4. Veteranos #B")) # dataset de mujeres
+#x=dataFc4$timerun/60
+#hist(x, xlim=c(40,100), las=1,
+#main = "Distribución de los tiempos mujeres Veteranas B",
+#xlab="tiempo (min)",
+#ylab = "frecuencia",
+#col ="#ee964b")
+```
+
+Column {data-width=650}
+-----------------------------------------------------------------------
+
+### Participación en categorías
+
+```{r}
+data=CarreraLuz22
+t1=table(data$categoria)
+pie(t1, main = "Participantes por categoría", col = c("yellow", "seagreen", "orange", "grey", "royalblue"))
+```
+
+### Participación por género
+
+```{r}
+#plot(x = data$sex, main = "Gráfica de Educacíón",
+     #xlab = "Nivel educativo", ylab = "Frecuencia", 
+     #col = c("royalblue", "seagreen"))
+
+data=CarreraLuz22
+t2=table(data$sex)
+barplot(t2, main = "Participantes por género", xlab = "Sexo", ylab = "Participantes", col = c("royalblue", "purple"), ylim = c(0, 1400))
+#pie(t2, main = "Participantes por género")
+```
+
+Column {data-width=150}
+-----------------------------------------------------------------------
+
+### Total atletas
+```{r}
+valueBox(value = paste(10.07,"Km"), caption = "Distancia recorrida")
+```         
+
+### Total atletas
+
+```{r}
+N_atletas=length(data$id)
+valueBox(N_atletas, caption = "Total atletas")
+```
+
+### Mayor edad
+
+```{r}
+mayoredad = max(CarreraLuz22$edad)
+valueBox(value = paste (mayoredad, "años"), caption = "Mayor edad")
+```
+
+### Menor edad
+
+```{r}
+menoredad = min(CarreraLuz22$edad)
+valueBox(value = paste (menoredad, "años"), caption = "Menor edad")
+```
+
+### Edad promedio
+
+```{r}
+promedioedad = round (mean(CarreraLuz22$edad),0)
+valueBox(value = paste (promedioedad, "años"), 1, caption = "Edad promedio")
+```
+
+### Tiempo más bajo
+
+```{r}
+tiempomasbajo=round(min(CarreraLuz22$timerun/60),2)
+valueBox(value = paste (tiempomasbajo, "min"), caption = "Mejor tiempo")
+```
+
+### Tiempo más alto
+
+```{r}
+tiempomasalto=round(max(CarreraLuz22$timerun/60),2)
+valueBox(value = paste (tiempomasalto, "min"), caption = "Peor tiempo")
+```
+
+### Tiempo promedio
+
+```{r}
+tiempopromedio=round(mean(CarreraLuz22$timerun/60),2)
+valueBox(value = paste (tiempopromedio, "min"), caption = "Tiempo promedio")
+```
