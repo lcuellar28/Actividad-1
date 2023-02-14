@@ -105,21 +105,21 @@ ggplot(CarreraLuz22_c3M, aes(timerun/60)) +
     geom_density(color = "green", fill = "green", alpha = 0.5)
 ```
 
-
-### Información adicional
+### Participantes por ciudad
 
 ```{r}
 table(CarreraLuz22$origen)
-table(CarreraLuz22$nacionalidad)
-
-#dataFc4=subset(CarreraLuz22, (CarreraLuz22$sex=="Mujer" & CarreraLuz22$categoria=="4. Veteranos #B")) # dataset de mujeres
-#x=dataFc4$timerun/60
-#hist(x, xlim=c(40,100), las=1,
-#main = "Distribución de los tiempos mujeres Veteranas B",
-#xlab="tiempo (min)",
-#ylab = "frecuencia",
-#col ="#ee964b")
 ```
+
+### Información adicional
+
+```{r, echo=FALSE, out.width="400px", fig.retina=2, fig.align = "right"}
+knitr::include_graphics("carrera10K.png")
+```
+
+**10.07 K** Participantes desde los 15 años en adelante.
+
+**Salida**: Hotel Intercontinental, calle 5, Carrera 6, carrera 4c, carrera1, carrera 4, calle de la escopeta, museo arqueológico la merced, bulevar del rio, puente Ortiz, av 2N, parque lineal rio Cali av2n, calle 25, parque lineal av1n, calle 13, carrera 1 calle 12, carrera 5, calle 10, gobernación del valle, edificio Aristi carrera 9, calle 9 plazoleta de san francisco, bulevar del rio, calle 8, carrera 4, carrera 3ª, parque del peñón, carrera 3, carrera 3ª oeste, calle 5 oeste, carrera 4, av Belalcázar, carrera 2ª oeste, librería nacional, carrera 1c, museo la tertulia, av Colombia, pepe ganga, carrera 3, carrera 2, carrera 3ª, av Colombia, carrera 4, meta hotel intercontinental. [juanchocorrelon.com](https://juanchocorrelon.com/intercontinental-10k-luz-2022/#10k)
 
 Column {data-width=650}
 -----------------------------------------------------------------------
@@ -148,10 +148,10 @@ barplot(t2, main = "Participantes por género", xlab = "Sexo", ylab = "Participa
 Column {data-width=150}
 -----------------------------------------------------------------------
 
-### Total atletas
+### Total distancia
 ```{r}
 valueBox(value = paste(10.07,"Km"), caption = "Distancia recorrida")
-```         
+```  
 
 ### Total atletas
 
